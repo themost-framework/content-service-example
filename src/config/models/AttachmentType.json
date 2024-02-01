@@ -1,0 +1,66 @@
+{
+  "$schema": "https://themost-framework.github.io/themost/models/2018/2/schema.json",
+  "@id": "https://themost.io/schemas/AttachmentType",
+  "name": "AttachmentType",
+  "hidden": false,
+  "sealed": false,
+  "abstract": false,
+  "implements": "Enumeration",
+  "version": "1.0.0",
+  "fields": [
+    {
+      "@id": "http://schema.org/alternateName",
+      "name": "alternateName",
+      "description": "An alias for the item.",
+      "nullable": false,
+      "type": "Text"
+    }
+  ],
+  "privileges": [
+    {
+      "mask": 1,
+      "type": "global",
+      "account": "*"
+    },
+    {
+      "mask": 15,
+      "type": "global"
+    },
+    {
+      "mask": 15,
+      "type": "global",
+      "account": "Administrators"
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "description": "Alternate name must be unique across different records",
+      "fields": [
+        "alternateName"
+      ]
+    }
+  ],
+  "seed": [
+    {
+      "name": "Image",
+      "alternateName": "Image"
+    },
+    {
+      "name": "Document",
+      "alternateName": "Document"
+    },
+    {
+      "name": "Video",
+      "alternateName": "Video"
+    },
+    {
+      "name": "Audio",
+      "alternateName": "Audio"
+    },
+    {
+      "name": "Other",
+      "alternateName": "Other"
+    }
+  ]
+}

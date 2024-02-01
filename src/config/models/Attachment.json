@@ -1,0 +1,97 @@
+{
+  "$schema": "https://themost-framework.github.io/themost/models/2018/2/schema.json",
+  "@id": "https://themost.io/schemas/Attachment",
+  "name": "Attachment",
+  "title": "Attachments",
+  "hidden": true,
+  "sealed": false,
+  "abstract": false,
+  "implements": "Thing",
+  "version": "1.0.0",
+  "fields": [
+    {
+      "@id": "https://themost.io/schemas/id",
+      "name": "id",
+      "type": "Counter",
+      "nullable": false,
+      "primary": true
+    },
+    {
+      "@id": "http://schema.org/additionalType",
+      "name": "additionalType",
+      "type": "Text",
+      "value": "javascript:return this.model.name;"
+    },
+    {
+      "name": "alternateName",
+      "description": "An alias for the item.",
+      "type": "Text",
+      "nullable": false,
+      "value": "javascript:return this.chars(12);"
+    },
+    {
+      "@id": "https://themost.io/schemas/contentType",
+      "name": "contentType",
+      "description": "A content type for this item.",
+      "type": "Text",
+      "nullable": false
+    },
+    {
+      "@id": "https://themost.io/schemas/datePublished",
+      "name": "datePublished",
+      "description": "Date of first broadcast/publication.",
+      "type": "DateTime"
+    },
+    {
+      "@id": "https://themost.io/schemas/published",
+      "name": "published",
+      "description": "Indicates whether the item is published or not.",
+      "type": "Boolean",
+      "nullable": false,
+      "value": "javascript:return false;"
+    },
+    {
+      "@id": "https://themost.io/schemas/keywords",
+      "name": "keywords",
+      "description": "The keywords/tags used to describe this content.",
+      "type": "Text",
+      "many": true
+    },
+    {
+      "@id": "https://themost.io/schemas/thumbnail",
+      "name": "thumbnail",
+      "description": "A thumbnail image relevant to the item.",
+      "type": "URL"
+    },
+    {
+      "@id": "https://themost.io/schemas/version",
+      "name": "version",
+      "description": "The version of this item.",
+      "type": "Text"
+    },
+    {
+      "@id": "https://themost.io/schemas/attachmentType",
+      "name": "attachmentType",
+      "description": "The attachment type",
+      "type": "AttachmentType"
+    },
+    {
+      "@id": "http://schema.org/owner",
+      "name": "owner",
+      "description": "The owner of the action e.g. a user who request something.",
+      "type": "Account",
+      "value": "javascript:return this.user();"
+    }
+  ],
+  "privileges": [
+    {
+      "mask": 15,
+      "type": "global"
+    },
+    {
+      "mask": 15,
+      "type": "global",
+      "account": "Administrators"
+    }
+  ]
+}

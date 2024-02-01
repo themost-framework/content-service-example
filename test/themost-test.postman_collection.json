@@ -1,0 +1,332 @@
+{
+	"info": {
+		"_postman_id": "f32dbdcc-2f17-4839-8ad1-a0507b674d0d",
+		"name": "@themost/test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "7401347"
+	},
+	"item": [
+		{
+			"name": "1. Get OAuth2 Token",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(responseCode.code === 200)",
+							"{",
+							"    pm.collectionVariables.set(\"OAuth2AccessToken\", data.access_token);",
+							"    tests[\"Parse access token\"] = true;",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "alexis.rees@example.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "9165351833584149",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "hTgqFBUhCfHs/quf/wnoB+UpDSfUusKA",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "profile",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{OAuth2TokenAddress}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Get User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{ApiAddress}}/api/Users/Me"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Service Metadata",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{ApiAddress}}/api/AttachmentTypes"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{ApiAddress}}/api/People"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customer Orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiAddress}}/api/CustomerOrders?$expand=attachments",
+					"host": [
+						"{{ApiAddress}}"
+					],
+					"path": [
+						"api",
+						"CustomerOrders"
+					],
+					"query": [
+						{
+							"key": "$expand",
+							"value": "attachments"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Create Customer Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(responseCode.code === 200)",
+							"{",
+							"    pm.collectionVariables.set(\"order_id\", data.id);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderedItem\": {\n        \"name\": \"Apple MacBook Air (13.3-inch, 2013 Version)\"\n    },\n    \"customer\": {\n        \"email\": \"eric.stokes@example.com\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{ApiAddress}}/api/CustomerOrders"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Add Attachment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(responseCode.code === 200)",
+							"{",
+							"    pm.collectionVariables.set(\"attachment_id\", data.id);",
+							"    pm.collectionVariables.set(\"attachment_url\", data.url);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/kbarbounakis/Downloads/lorem-ipsum (1) (1) (1) (1).pdf"
+						},
+						{
+							"key": "attachmentType[alternateName]",
+							"value": "Other",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{ApiAddress}}/api/CustomerOrders/{{order_id}}/AddAttachment"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Get Attachment Content",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": "{{ApiAddress}}{{attachment_url}}"
+			},
+			"response": []
+		},
+		{
+			"name": "5. Remove Attachment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(responseCode.code === 200)",
+							"{",
+							"    pm.collectionVariables.set(\"attachment_id\", data.id);",
+							"    pm.collectionVariables.set(\"attachment_url\", data.url);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/kbarbounakis/Downloads/lorem-ipsum (1) (1) (1) (1).pdf"
+						},
+						{
+							"key": "attachmentType[alternateName]",
+							"value": "Other",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{ApiAddress}}/api/CustomerOrders/{{order_id}}/AddAttachment"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "{{OAuth2AccessToken}}"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "OAuth2TokenAddress",
+			"value": "http://localhost:3000/auth/token",
+			"type": "string"
+		},
+		{
+			"key": "OAuth2AccessToken",
+			"value": ""
+		},
+		{
+			"key": "ApiAddress",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "order_id",
+			"value": ""
+		},
+		{
+			"key": "attachment_id",
+			"value": ""
+		},
+		{
+			"key": "attachment_url",
+			"value": ""
+		}
+	]
+}

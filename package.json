@@ -1,0 +1,34 @@
+{
+  "name": "nodejs-sandbox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "nodemon --watch src --ext \"js,json\" --exec \"npm run build && cross-env NODE_ENV=development node dist/index\"",
+    "build": "rimraf dist && babel src --out-dir dist --copy-files --source-maps"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [],
+  "author": "Kyriakos Barbounakis",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.23.9",
+    "@babel/core": "^7.23.9",
+    "@babel/eslint-parser": "^7.23.10",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-decorators": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "@babel/register": "^7.23.7",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.56.0",
+    "nodemon": "^3.0.1",
+    "rimraf": "^5.0.5"
+  },
+  "dependencies": {
+    "@themost/data": "^2.11.3",
+    "@themost/query": "^2.11.2",
+    "@themost/test": "^2.3.4"
+  }
+}
