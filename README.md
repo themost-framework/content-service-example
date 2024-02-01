@@ -4,6 +4,16 @@ This project is an example of how to use `Attachment` model and `PrivateContentS
 
 It extends api services provided by `@themost/test` package at https://github.com/themost-framework/test
 
+## Installation
+
+Clone this repository and install dependencies:
+
+```bash
+git clone https://github.com/themost-framework/content-service-example
+cd content-service-example
+npm install
+```
+
 ## Test
 
 Start the application by running the following command:
